@@ -58,7 +58,7 @@ func handlerRegister(s *state, cmd command) error {
 		if err2 != nil {
 			return fmt.Errorf("Could not set current user: %w\n", err2)
 		}
-		fmt.Println("User created successfully")
+		fmt.Println("User created successfully and is currently logged in.")
 		printUser(user)
 		return nil
 	} else if err != nil {
@@ -67,6 +67,21 @@ func handlerRegister(s *state, cmd command) error {
 		return fmt.Errorf("username %v already exists \n", args.Name)
 	}
 
+}
+
+func handlerGetUsers(s *state, cmd command) error {
+	names, err := s.db.GetUsers(context.Background())
+	if err != nil {
+		return fmt.Errorf("Error querying the user's names: %v", err)
+	}
+	for _, name := range names {
+		if s.cfg.CurrentUserName == name {
+			fmt.Printf("%s (current)\n", name)
+			continue
+		}
+		fmt.Println(name)
+	}
+	return nil
 }
 
 func handlerReset(s *state, cmd command) error {
