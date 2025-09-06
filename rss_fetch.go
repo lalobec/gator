@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"time"
 	"encoding/xml"
 	"fmt"
 	"html"
@@ -26,14 +27,16 @@ type RSSItem struct {
 }
 
 func fetchFeed(ctx context.Context, feedURL string) (*RSSFeed, error) {
+	httpClient := http.Client{
+		Timeout: 10 * time.Second,
+	}
 	req, err := http.NewRequestWithContext(ctx, "GET", feedURL, nil)
 	if err != nil {
 		return nil, fmt.Errorf("Error creating the request for the given URL: %v \n", err)
 	}
+	
 	req.Header.Set("User-Agent", "gator")
-
-	client := http.DefaultClient
-	resp, err := client.Do(req)
+	resp, err := httpClient.Do(req)
 	if err != nil {
 		return nil, fmt.Errorf("Error making the request: %v\n", err)
 	}
@@ -44,15 +47,15 @@ func fetchFeed(ctx context.Context, feedURL string) (*RSSFeed, error) {
 		return nil, fmt.Errorf("Error reading the response: %v\n", err)
 	}
 
-	dataResp := RSSFeed{}
-	err = xml.Unmarshal(dat, &dataResp)
+	var rssFeed RSSFeed
+	err = xml.Unmarshal(dat, &rssFeed)
 	if err != nil {
 		return nil, fmt.Errorf("Error decoding data: %v\n", err)
 	}
 
-	unescapeHTML(&dataResp)
+	unescapeHTML(&rssFeed)
 
-	return &dataResp, nil
+	return &rssFeed, nil
 }
 
 func unescapeHTML(rssFeed *RSSFeed) {
