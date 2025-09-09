@@ -53,11 +53,8 @@ func handlerGetFeeds(s *state, cmd command) error {
 		fmt.Println("=====================")
 		fmt.Printf("Name: %s\n", feed.Name)
 		fmt.Printf("URL: %s\n", feed.Url)
-		user, err := s.db.GetUserFromId(context.Background(), feed.UserID)
-		if err != nil {
-			return err
-		}
-		fmt.Printf("UserID: %s\n", user.Name)
+
+		fmt.Printf("UserID: %s\n", feed.UserID)
 	}
 
 	return nil
