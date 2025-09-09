@@ -18,5 +18,3 @@ DELETE FROM users;
 -- name: GetUsers :many
 SELECT name FROM users;
 
--- name: CreateFeeds :one
-
