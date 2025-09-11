@@ -11,7 +11,7 @@ import (
 func handlerAddFeed(s *state, cmd command) error {
 	username, err := s.db.GetUser(context.Background(), s.cfg.CurrentUserName)
 	if err != nil {
-		return fmt.Errorf("The is not a username logged in: %v\n", err)
+		return fmt.Errorf("There is not a username logged in: %v\n", err)
 	}
 
 	if len(cmd.arguments) != 2 {
@@ -32,6 +32,15 @@ func handlerAddFeed(s *state, cmd command) error {
 	feed, err := s.db.GetFeed(context.Background(), args)
 	if err != nil {
 		return fmt.Errorf("An error ocurred getting the feed: %v", err)
+	}
+
+	argsCreateFeed := database.CreateFeedFollowParams {
+		UserID: username.ID,
+		FeedID: feed.ID,
+	}
+	_, err = s.db.CreateFeedFollow(context.Background(), argsCreateFeed)
+	if err != nil {
+		return err
 	}
 
 	fmt.Println("Feed created successfully")
