@@ -35,6 +35,9 @@ func handlerAddFeed(s *state, cmd command) error {
 	}
 
 	argsCreateFeed := database.CreateFeedFollowParams {
+		ID: uuid.New(),
+		CreatedAt: time.Now(),
+		UpdatedAt: time.Now(),
 		UserID: username.ID,
 		FeedID: feed.ID,
 	}

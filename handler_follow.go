@@ -4,6 +4,8 @@ import (
 	"context"
 	"fmt"
 	"github.com/lalobec/gator/internal/database"
+	"github.com/google/uuid"
+	"time"	
 )
 
 import _ "github.com/lib/pq"
@@ -26,6 +28,9 @@ func handlerFollow(s *state, cmd command) error {
 	}
 
 	args := database.CreateFeedFollowParams{
+		ID: uuid.New(),
+		CreatedAt: time.Now(),
+		UpdatedAt: time.Now(),
 		UserID: user.ID,
 		FeedID: feed.ID,
 	}
