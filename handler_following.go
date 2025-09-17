@@ -3,15 +3,11 @@ package main
 import (
 	"context"
 	"fmt"
+	"github.com/lalobec/gator/internal/database"
 )
 
-func handlerFollowing(s *state, cmd command) error {
+func handlerFollowing(s *state, cmd command, user database.User) error {
 	ctx := context.Background()
-	user, err := s.db.GetUser(ctx, s.cfg.CurrentUserName)
-	if err != nil {
-		return fmt.Errorf("A user must be logged in to follow a feed: %v\n", err)
-	}
-
 	follows, err := s.db.GetFeedFollowsForUser(ctx, user.ID)
 	if err != nil {
 		return nil

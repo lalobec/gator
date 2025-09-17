@@ -10,12 +10,8 @@ import (
 
 import _ "github.com/lib/pq"
 
-func handlerFollow(s *state, cmd command) error {
+func handlerFollow(s *state, cmd command, user database.User) error {
 	ctx := context.Background()
-	user, err := s.db.GetUser(ctx, s.cfg.CurrentUserName)
-	if err != nil {
-		return fmt.Errorf("A user must be logged in to follow a feed: %v\n", err)
-	}
 
 	if len(cmd.arguments) != 1 {
 		return fmt.Errorf("usage: %v <url>", cmd.name)
