@@ -44,6 +44,7 @@ func main() {
 	cmds.register("feeds", handlerGetFeeds)
 	cmds.register("follow", middlewareLoggedIn(handlerFollow))
 	cmds.register("following", middlewareLoggedIn(handlerFollowing))
+	cmds.register("unfollow", middlewareLoggedIn(handlerUnfollow))
 	cmds.register("reset", handlerReset)
 
 	if len(os.Args) < 2 {
